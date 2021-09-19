@@ -7,5 +7,5 @@ pipeline {
         sh './build_web.sh GIT_BRANCH $(git tag --sort version:refname | tail -1)'
       }
     }
-
+  }
 }
