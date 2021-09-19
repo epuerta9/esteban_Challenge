@@ -1,9 +1,5 @@
 pipeline {
-  agent {
-    docker {
-      image 'public.ecr.aws/y3f6w2p0/epuerta-challenge/webapp:latest'
-    }
-
+  agent any
   }
   stages {
     stage('prebuild') {
