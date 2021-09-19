@@ -1,20 +1,34 @@
 pipeline {
-    agent any
-    stages {
-        stage('prebuild'){
-            steps {
-                echo 'prebuilding'
-            }
-        }
-        stage('build'){
-            steps {
-                sh 'ls -la '
-            }
-        }
-        stage('postbuild'){
-            steps {
-                echo 'postbuild'
-            }
-        }
+  agent {
+    docker {
+      image 'nginx:latest'
     }
+
+  }
+  stages {
+    stage('prebuild') {
+      agent {
+        docker {
+          image 'nginx:latest'
+        }
+
+      }
+      steps {
+        echo 'prebuilding'
+      }
+    }
+
+    stage('build') {
+      steps {
+        sh 'ls -la '
+      }
+    }
+
+    stage('postbuild') {
+      steps {
+        echo 'postbuild'
+      }
+    }
+
+  }
 }
