@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image 'nginx:latest'
+      image 'public.ecr.aws/y3f6w2p0/epuerta-challenge/webapp:latest'
     }
 
   }
@@ -9,7 +9,7 @@ pipeline {
     stage('prebuild') {
       agent {
         docker {
-          image 'nginx:latest'
+          image 'public.ecr.aws/y3f6w2p0/epuerta-challenge/webapp:latest'
         }
 
       }
