@@ -1,2 +1,10 @@
 ---
 # tasks file for challenge_web
+
+- name: pulling down web app
+  docker_container:
+    name: webapp-challenge
+    image: public.ecr.aws/y3f6w2p0/epuerta-challenge/webapp:{{ tag }}
+    state: started
+    ports:
+      - "8000:8000"

@@ -30,6 +30,10 @@
     clients: ['pip3']
   ignore_errors: yes
 
+- name: installing pip docker 
+  pip:
+    name: docker
+    
 - name: version of python and version of pip 
   shell: python3 --version && pip3 --version
   register: versions

@@ -1,4 +1,0 @@
----
-#needs to be overwritten at runtime
-
-src_to_key: ./keys/dev_challenge.pub

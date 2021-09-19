@@ -4,6 +4,6 @@
     vpc_public_subnets = ["10.3.2.0/24"]
     vpc_enable_nat_gateway = false
     web_app_instance_size = "t3.micro"
-    challenge_env_key = "dev-challenge-key"
+    challenge_env_key = "prod-challenge-key"
     env = "prod"
     ssl_cert_id = "arn:aws:acm:us-east-2:341831142426:certificate/11aea1f1-7247-4117-8eb6-0719abcd14de"

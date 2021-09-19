@@ -57,6 +57,7 @@ resource "aws_instance" "webapp" {
 }
 
 ## security group
+#["0.0.0.0/0"]
 resource "aws_security_group" "web_app_sg" {
   name = "${var.env}_web_sg"
   description = "allows 80 from loadbalancer and 22 from ansible bastion"
@@ -67,8 +68,8 @@ resource "aws_security_group" "web_app_sg" {
           from_port = 8000
           to_port = 8000
           protocol = "tcp"
-          cidr_blocks = ["0.0.0.0/0"]
-          security_groups = null
+          cidr_blocks =  null
+          security_groups = ["${aws_security_group.elb_app_sg.id}"]
           self = null
           ipv6_cidr_blocks = null
           prefix_list_ids = null
@@ -78,8 +79,8 @@ resource "aws_security_group" "web_app_sg" {
           from_port = 22
           to_port = 22
           protocol = "tcp"
-          cidr_blocks = ["0.0.0.0/0"]
-          security_groups = null
+          cidr_blocks = null
+          security_groups = ["${aws_security_group.bastion_sg.id}"]
           self = null
           ipv6_cidr_blocks = null
           prefix_list_ids = null
@@ -104,10 +105,49 @@ resource "aws_security_group" "web_app_sg" {
     "env" = "${var.env}"
   }
 }
+
+## load balancer security group 
+## security group
+resource "aws_security_group" "elb_app_sg" {
+  name = "${var.env}_app_sg"
+  description = "allows 443 from anywhere"
+  vpc_id = module.network.vpc_id
+  ingress = [
+      {
+          description = "external load balancer rules"
+          from_port = 443
+          to_port = 443
+          protocol = "tcp"
+          cidr_blocks = ["0.0.0.0/0"]
+          security_groups = null
+          self = null
+          ipv6_cidr_blocks = null
+          prefix_list_ids = null
+      }
+  ]
+  egress = [
+    {
+      from_port        = 0
+      to_port          = 0
+      protocol         = "-1"
+      cidr_blocks      = null
+      ipv6_cidr_blocks = ["::/0"]
+      security_groups = null
+      self = null
+      ipv6_cidr_blocks = null
+      prefix_list_ids = null
+      description = null
+    }
+  ]
+  tags = {
+    "env" = "${var.env}"
+  }
+}
 ## load balancer
 resource "aws_elb" "web_app_elb" {
   name = "${var.env}-web-elb"
   subnets = ["${module.network.vpc_public_subnet_id[0]}"]
+  security_groups = [ "${aws_security_group.elb_app_sg.id}" ]
 
   listener {
     instance_port = 8000

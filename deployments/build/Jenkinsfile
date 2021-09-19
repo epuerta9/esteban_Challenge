@@ -1,27 +1,23 @@
 pipeline {
   agent any
   stages {
-    stage('prebuild') {
-      agent {
-        docker {
-          image 'public.ecr.aws/y3f6w2p0/epuerta-challenge/webapp:latest'
-        }
-
+    stage('build image') {
       }
       steps {
-        echo 'prebuilding'
+        withAWS(credentials)
+        sh './build_web.sh GIT_BRANCH $(git tag --sort version:refname | tail -1)'
       }
     }
 
-    stage('build') {
+    stage('test image') {
       steps {
-        sh 'ls -la '
+        sh 'tests would go here '
       }
     }
 
     stage('postbuild') {
       steps {
-        echo 'postbuild'
+        echo 'send some notifications'
       }
     }
 
