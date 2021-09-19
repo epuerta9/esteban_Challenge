@@ -4,22 +4,9 @@ pipeline {
     stage('build image') {
       }
       steps {
-        withAWS(credentials)
+        withAWS(credentials: 'epuerta-challenge', region: 'us-east-2')
         sh './build_web.sh GIT_BRANCH $(git tag --sort version:refname | tail -1)'
       }
     }
 
-    stage('test image') {
-      steps {
-        sh 'tests would go here '
-      }
-    }
-
-    stage('postbuild') {
-      steps {
-        echo 'send some notifications'
-      }
-    }
-
-  }
 }

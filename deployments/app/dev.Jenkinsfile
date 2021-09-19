@@ -1,14 +1,21 @@
 pipeline {
   agent any
   stages {
-    stage('prebuild') {
+    stage('terraform') {
       }
       steps {
-        echo 'prebuilding'
+        withAWS(credentials: 'epuerta-challenge', region: 'us-east-2')
+        dir('infra/app') {
+            sh 'terraform init'
+            sh 'terraform validate'
+            sh 'terraform workspace dev'
+            sh 'terraform apply --auto-approve'
+            sh 'terraform output -json'
+        }
       }
     }
 
-    stage('build') {
+    stage('ansible') {
       steps {
         sh 'ls -la '
       }
