@@ -3,9 +3,10 @@ pipeline {
   stages {
     stage('build image') {
       steps {
-        withAWS(credentials: 'epuerta-challenge', region: 'us-east-2'){
-            sh './build_web.sh GIT_BRANCH $(git tag --sort version:refname | tail -1)'
-        }
+          dir('deployments/build')
+            withAWS(credentials: 'epuerta-challenge', region: 'us-east-2'){
+                sh './build_web.sh GIT_BRANCH $(git tag --sort version:refname | tail -1)'
+            }
       }
     }
   }
