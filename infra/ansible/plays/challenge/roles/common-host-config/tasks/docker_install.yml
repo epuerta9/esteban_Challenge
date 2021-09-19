@@ -1,0 +1,65 @@
+- name: Install packages needed for Docker
+  become: yes
+  apt:
+    name: "{{ DOCKER_PACKAGES }}"
+    state: present
+    force_apt_get: "yes"
+
+- name: Add Docker GPG apt Key
+  become: yes
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Save the current Ubuntu release version into a variable
+  shell: lsb_release -cs
+  register: ubuntu_version
+
+- name: Add Docker Repository
+  become: yes
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ubuntu_version.stdout }} stable"
+    state: present
+
+- name: Update apt packages
+  become: yes
+  apt:
+    update_cache: "yes"
+    force_apt_get: "yes"
+
+- name: Install Docker
+  become: yes
+  apt:
+    name: "docker-ce"
+    state: present
+    force_apt_get: "yes"
+
+- name: Test Docker with hello world example
+  become: yes
+  shell: "docker run hello-world"
+  register: hello_world_output
+
+- name: Show output of hello word example
+  debug:
+    msg: "Container Output: {{hello_world_output.stdout}}"
+
+- name: Create docker group
+  become: yes
+  group:
+    name: "docker"
+    state: present
+
+- name: Adding user {{ USER }} to docker group 
+  become: yes 
+  user:
+    name: "{{ USER }}"
+    groups: "docker"
+    append: "yes"
+
+- name: Install Docker Compose
+  become: yes
+  get_url:
+    url: https://github.com/docker/compose/releases/download/{{ DOCKER_COMPOSE_VERSION }}/docker-compose-Linux-x86_64
+    dest: "/usr/local/bin/docker-compose"
+    mode: 0755
+

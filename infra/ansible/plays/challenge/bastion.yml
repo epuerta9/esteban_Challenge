@@ -1,0 +1,10 @@
+- hosts: role_bastion
+  gather_facts: no
+  tags:
+    - bastion
+  remote_user: ubuntu
+  tasks:
+
+    - name: using the bastion-config role
+      import_role:
+        name: bastion-config

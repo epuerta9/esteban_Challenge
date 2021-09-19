@@ -1,0 +1,12 @@
+- hosts: all
+  tags:
+    - common
+  gather_facts: yes
+  remote_user: ubuntu
+  tasks:
+
+    - name: configure common
+      import_role:
+        name: common-host-config
+      tags:
+        - common

@@ -48,6 +48,8 @@ resource "aws_instance" "webapp" {
     tags = {
       "Name" = "esteban_challenge_web"
       "vpc" = module.network.vpc_name
+      "env" = var.env
+      "role" = "web"
     }
     depends_on = [
         aws_security_group.web_app_sg

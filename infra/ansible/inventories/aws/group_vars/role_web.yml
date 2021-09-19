@@ -1,0 +1,5 @@
+
+#####ansible ssh proxy commands
+##override this command in ci/cd when key is added to ssh-agent
+
+ansible_ssh_common_args: '-o StrictHostKeyChecking="no" -o ProxyCommand="ssh -W %h:%p ubuntu@52.15.124.15"'

@@ -1,0 +1,27 @@
+
+
+#setting up node exporter on a machine
+
+- name: copying node_exporter service file to /home/ubuntu
+  copy:
+    src: node_exporter.service
+    dest: /home/ubuntu/
+- name: copying the node_script to /home/ubuntu
+  copy:
+    src: node_exporter.sh
+    dest: /home/ubuntu
+
+- name: moving the script and running node_exporter on remote machines
+  become: yes
+  shell: /bin/bash /home/ubuntu/node_exporter.sh
+  async: 45
+  poll: 5
+  register: node_exporter
+  ignore_errors: yes
+    
+- name: debugging node_exporter script
+  debug:
+    var: node_exporter
+  ignore_errors: yes
+
+

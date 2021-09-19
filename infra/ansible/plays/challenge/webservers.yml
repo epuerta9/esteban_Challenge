@@ -1,0 +1,14 @@
+- hosts: role_web
+  gather_facts: yes
+  tags:
+    - web
+  remote_user: ubuntu
+  tasks:
+
+    - name: printout host name
+      shell: hostnamectl
+      register: host
+
+    - name: printing
+      debug:
+        var: host.stdout

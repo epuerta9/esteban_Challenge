@@ -1,0 +1,11 @@
+---
+# vars file for prometheus-host-config
+app_paths:
+  - "/home/ubuntu/app/conf"
+  - "/home/ubuntu/app/data"
+  - "/home/ubuntu/app/logs"
+
+ips:
+  - "192.168.1.1"
+  - "192.168.2.5"
+  - "192.168.8.8"

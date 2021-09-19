@@ -8,6 +8,8 @@ resource "aws_instance" "ansible_bastion" {
     tags = {
       "Name" = "esteban_challenge_bastion"
       "vpc" = module.network.vpc_name
+      "env" = var.env
+      "role" = "bastion"
     }
 }
 

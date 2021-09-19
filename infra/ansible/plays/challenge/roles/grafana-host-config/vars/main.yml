@@ -1,0 +1,10 @@
+---
+# vars file for grafana-host-config
+
+app_paths:
+ - "/home/ubuntu/app/data"
+ - "/home/ubuntu/app/conf"
+ - "/home/ubuntu/app/logs"
+
+
+

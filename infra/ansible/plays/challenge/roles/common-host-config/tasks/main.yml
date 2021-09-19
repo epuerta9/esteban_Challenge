@@ -1,0 +1,46 @@
+---
+# tasks file for common-host-config
+
+- name: update
+  become: yes
+  apt:
+    update_cache: yes
+
+- name: upgrade
+  become: yes
+  apt:
+    upgrade: yes
+
+- name: pip upgrade 
+  become: yes
+  apt:
+    name: "{{ apt_packages }}"
+    state: present
+  ignore_errors: yes
+  register: packages
+
+- name: packages installed
+  debug:
+    var: packages
+  ignore_errors: yes
+
+- name: pip info
+  become: yes
+  pip_package_info:
+    clients: ['pip3']
+  ignore_errors: yes
+
+- name: version of python and version of pip 
+  shell: python3 --version && pip3 --version
+  register: versions
+  ignore_errors: yes
+
+- debug:
+    var: versions.stdout
+  ignore_errors: yes
+
+- name: setting up docker
+  import_tasks: docker_install.yml
+
+- name: setting up node_exporter
+  import_tasks: node_exporter.yml

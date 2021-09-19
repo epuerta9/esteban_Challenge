@@ -1,0 +1,11 @@
+plugin: aws_ec2
+region: us-east-2
+filters:
+ tag:env: "stage"
+ instance-state-name: "running"
+keyed_groups:
+  - key: tags.Name
+    prefix: name
+  - key: tags.role
+    prefix: role
+
