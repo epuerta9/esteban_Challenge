@@ -2,7 +2,6 @@ pipeline {
   agent any
   stages {
     stage('terraform') {
-      }
       steps {
         withAWS(credentials: 'epuerta-challenge', region: 'us-east-2'){
             dir('infra/app') {
@@ -22,7 +21,7 @@ pipeline {
             DEV_KEY = "aws secretsmanager get-secret-value --secret-id epuerta/challenge --output json | jq '. | .SecretString' | python -c 'import json,sys;obj=json.loads(json.load(sys.stdin));print(obj.get("dev_private"))'"
         }
       steps {
-          withAWS(credentials: 'epuerta-challenge', region: 'us-east-2') {
+            withAWS(credentials: 'epuerta-challenge', region: 'us-east-2') {
               dir('infra/ansible') {
                   unstash 'tf_output'
                   sh '''
@@ -34,16 +33,9 @@ pipeline {
                   ansible-playbook -i inventories/aws/dev.aws_ec2.yml plays/challenge/webserver.yml 
                 '''
               }
-          }
-        sh ''
-      }
+            }
+        }
     }
-
-    stage('postbuild') {
-      steps {
-        echo 'postbuild'
-      }
-    }
-
   }
+
 }
