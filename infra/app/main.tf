@@ -57,7 +57,7 @@ resource "aws_instance" "webapp" {
 }
 
 ## security group
-#["0.0.0.0/0"]
+#["0.0.0.0/0"] egg ["${aws_security_group.bastion_sg.id}"] in ["${aws_security_group.elb_app_sg.id}"]
 resource "aws_security_group" "web_app_sg" {
   name = "${var.env}_web_sg"
   description = "allows 80 from loadbalancer and 22 from ansible bastion"
@@ -68,8 +68,8 @@ resource "aws_security_group" "web_app_sg" {
           from_port = 8000
           to_port = 8000
           protocol = "tcp"
-          cidr_blocks =  null
-          security_groups = ["${aws_security_group.elb_app_sg.id}"]
+          cidr_blocks =  ["0.0.0.0/0"]
+          security_groups = null
           self = null
           ipv6_cidr_blocks = null
           prefix_list_ids = null
@@ -80,7 +80,7 @@ resource "aws_security_group" "web_app_sg" {
           to_port = 22
           protocol = "tcp"
           cidr_blocks = null
-          security_groups = ["${aws_security_group.bastion_sg.id}"]
+          security_groups = null
           self = null
           ipv6_cidr_blocks = null
           prefix_list_ids = null
