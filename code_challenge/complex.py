@@ -18,22 +18,23 @@ class Complex(object):
         self.real = real
         self.imaginary = imaginary
     def __add__(self, no):
-        return f"{self.real + no.real} + {self.imaginary + no.imaginary}" 
+        return Complex((self.real + no.real), (self.imaginary+ no.imaginary))
     def __sub__(self, no):
-        pass
+        return Complex((self.real - no.real), (self.imaginary, no.imaginary))
     def __mul__(self, no):
-        #(3 + 4i)(2 + 2i)
-        firsts = self.real * no.real
-        outers = self.real * no.imaginary #with i 
-        inners = self.imaginary * no.real #with i
-        lasts = self.imaginary * no.imaginary #i^2
-
-        return f"{firsts} + {outers}i + {inners}i + {lasts}i^2"
+        real = self.real * no.real - self.imaginary * no.imaginary
+        imaginary = self.real * no.imaginary + self.imaginary * no.real
+        return Complex(real,imaginary)
 
     def __truediv__(self, no):
-
+        x = float(no.real ** 2 + no.imaginary ** 2)
+        y = self * Complex(no.real, -no.imaginary)
+        real = y.real / x
+        imaginary = y.imaginary / x
+        return Complex(real, imaginary)
     def mod(self):
-        pass
+        real = math.sqrt(self.real ** 2 + self.imaginary ** 2)
+        return Complex(real, 0)
     def __str__(self):
         if self.imaginary == 0:
             result = "%.2f+0.00i" % (self.real)
