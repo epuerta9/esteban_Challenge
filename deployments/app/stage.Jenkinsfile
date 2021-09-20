@@ -7,7 +7,7 @@ pipeline {
             dir('infra/app') {
                 sh 'terraform init'
                 sh 'terraform validate'
-                sh 'if [[ ! -z terraform workspace list | grep prod ]];then terraform workspace new stage fi'
+                sh 'if [[ ! -z terraform workspace list | grep prod ]];then terraform workspace new stage fi;'
                 sh 'terraform workspace select stage'
                 sh 'terraform apply -var-file=stage.tfvars --auto-approve'
                 sh 'terraform output -json > ../ansible/tf_output.json'
