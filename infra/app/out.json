@@ -1,0 +1,17 @@
+{
+  "bastion_ip": {
+    "sensitive": false,
+    "type": "string",
+    "value": "3.139.105.89"
+  },
+  "instance_ip": {
+    "sensitive": false,
+    "type": "string",
+    "value": "18.117.106.182"
+  },
+  "key_name": {
+    "sensitive": false,
+    "type": "string",
+    "value": "dev-challenge-key"
+  }
+}

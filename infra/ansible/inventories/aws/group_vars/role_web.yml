@@ -3,6 +3,6 @@
 ##override this command in ci/cd when key is added to ssh-agent
 
 #ansible_ssh_common_args: '-o StrictHostKeyChecking="no" -o ProxyCommand="ssh -W %h:%p ubuntu@3.129.194.229"'
-ansible_ssh_private_key_file: key_file
+#ansible_ssh_private_key_file: key_file
 ansible_python_interpreter: /usr/bin/python3
 ansible_port: 22
