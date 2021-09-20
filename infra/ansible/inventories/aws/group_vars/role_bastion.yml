@@ -3,7 +3,7 @@
 #configuration variables for the bastion
 #used for playbok bastion.yml
 
-ansible_ssh_common_args: '-o StrictHostKeyChecking="no" -o ProxyCommand="ssh -W %h:%p ubuntu@3.21.159.201"'
+ansible_ssh_common_args: '-o StrictHostKeyChecking="no" -o ProxyCommand="ssh -W %h:%p ubuntu@18.222.162.156"'
 ansible_python_interpreter: /usr/bin/python3
 #ansible_ssh_private_key_file: key_file
 ansible_port: 22
