@@ -7,7 +7,7 @@ pipeline {
             dir('infra/app') {
                 sh 'terraform init'
                 sh 'terraform validate'
-                sh 'terraform workspace dev'
+                sh 'terraform workspace new dev'
                 sh 'terraform apply --auto-approve'
                 sh 'terraform output -json > output.json'
                 stash includes: 'output.json', name: 'tf_output'
@@ -20,7 +20,7 @@ pipeline {
       steps {
             withAWS(credentials: 'epuerta-challenge', region: 'us-east-2') {
               dir('infra/ansible') {
-                  unstash 'tf_output'
+                  unstash '../infra/app/tf_output'
                   sh '''
                   #! /bin/bash
                   set -x 
