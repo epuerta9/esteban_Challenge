@@ -19,8 +19,10 @@ pipeline {
     stage('ansible') {
       steps {
             withAWS(credentials: 'epuerta-challenge', region: 'us-east-2') {
+              dir('infra/app'){
+                unstash 'tf_output'
+              }
               dir('infra/ansible') {
-                  unstash '../app/tf_output'
                   sh '''
                   #! /bin/bash
                   set -x 
