@@ -65,7 +65,7 @@ resource "aws_security_group" "web_app_sg" {
   ingress = [
       {
           description = "HTTP from load"
-          from_port = 8000
+          from_port = 80
           to_port = 8000
           protocol = "tcp"
           cidr_blocks =  null
@@ -130,7 +130,7 @@ resource "aws_security_group" "elb_app_sg" {
       from_port        = 0
       to_port          = 0
       protocol         = "-1"
-      cidr_blocks      = null
+      cidr_blocks      = ["0.0.0.0/0"]
       ipv6_cidr_blocks = ["::/0"]
       security_groups = null
       self = null
@@ -150,7 +150,7 @@ resource "aws_elb" "web_app_elb" {
   security_groups = [ "${aws_security_group.elb_app_sg.id}" ]
 
   listener {
-    instance_port = 8000
+    instance_port = 80
     instance_protocol = "http"
     lb_port = 443
     lb_protocol = "https"
@@ -161,7 +161,7 @@ resource "aws_elb" "web_app_elb" {
     healthy_threshold = 2
     unhealthy_threshold = 2 
     timeout = 3
-    target = "HTTP:8000/"
+    target = "HTTP:80/"
     interval = 30
   }
 

@@ -1,10 +1,20 @@
 from logging import error
 import boto3
 import argparse
+import sys
 
-def route53():
+def get_load_balancer_dns_name(client, args):
     
-    pass
+    try:
+        response = client.describe_load_balancers(
+        LoadBalancerNames=[
+            args.loadbalancer_name,
+        ],
+        )
+    except Exception as err:
+        print(err)
+        sys.exit()
+    return response['LoadBalancerDescriptions'][0]['DNSName']
 
 
 def main():
@@ -16,12 +26,15 @@ def main():
     args = parser.parse_args()
     host_id = "Z031591819EUTH2ZTC48D"
     print("starting")
+
+    load_balancer_dns_name = get_load_balancer_dns_name(elb_client, args)
+    print(load_balancer_dns_name)
     paginator = client.get_paginator('list_resource_record_sets')
     source_zone_records = paginator.paginate(HostedZoneId=host_id)
     for record_set in source_zone_records:
-        print(record_set)
         for record in record_set['ResourceRecordSets']:
-            if record['ResourceRecords'][0]['Value'] == args.env:
+            print(record['Name'])
+            if record['Name'] == f"{args.env}.clouddatadynamics.com.":
                 try:
                     change_res = client.change_resource_record_sets(
                         HostedZoneId=host_id,
@@ -48,7 +61,7 @@ def main():
                                     'TTL' : 300,
                                     'ResourceRecords' : [
                                         {
-                                            'Value' : args.loadbalancer_name
+                                            'Value' : load_balancer_dns_name
                                         }
                                     ]
 
@@ -58,9 +71,10 @@ def main():
                             ]
                         }
                     )
+                    print(change_res)
                 except Exception as err:
                     print(err)
-
+                    sys.exit()
 
 
 

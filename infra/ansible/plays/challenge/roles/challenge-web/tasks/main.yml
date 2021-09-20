@@ -7,4 +7,4 @@
     image: public.ecr.aws/y3f6w2p0/epuerta-challenge/webapp:{{ tag }}
     state: started
     ports:
-      - "8000:8000"
+      - "80:8000"
