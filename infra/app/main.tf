@@ -46,7 +46,7 @@ resource "aws_instance" "webapp" {
     vpc_security_group_ids = ["${aws_security_group.web_app_sg.id}"]
     subnet_id = module.network.vpc_public_subnet_id[0]
     tags = {
-      "Name" = "esteban_challenge_web"
+      "Name" = "esteban_challenge_web_${var.env}"
       "vpc" = module.network.vpc_name
       "env" = var.env
       "role" = "web"
@@ -66,7 +66,7 @@ resource "aws_security_group" "web_app_sg" {
       {
           description = "HTTP from load"
           from_port = 80
-          to_port = 8000
+          to_port = 80
           protocol = "tcp"
           cidr_blocks =  null
           security_groups = ["${aws_security_group.elb_app_sg.id}"]

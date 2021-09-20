@@ -6,7 +6,7 @@ resource "aws_instance" "ansible_bastion" {
     vpc_security_group_ids = ["${aws_security_group.bastion_sg.id}"]
     subnet_id = module.network.vpc_public_subnet_id[0]
     tags = {
-      "Name" = "esteban_challenge_bastion"
+      "Name" = "esteban_challenge_bastion_${var.env}"
       "vpc" = module.network.vpc_name
       "env" = var.env
       "role" = "bastion"
