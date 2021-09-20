@@ -19,7 +19,7 @@ def get_load_balancer_dns_name(client, args):
 
 def main():
     client = boto3.client('route53')
-    elb_client = boto3.client('elb')
+    elb_client = boto3.client('elbv2')
     parser = argparse.ArgumentParser(description="cli tool for challenege")
     parser.add_argument("--env", help="environment loadbalancer is in")
     parser.add_argument("--loadbalancer-name", help="loadbalancer name")

@@ -143,29 +143,84 @@ resource "aws_security_group" "elb_app_sg" {
     "env" = "${var.env}"
   }
 }
-## load balancer
-resource "aws_elb" "web_app_elb" {
-  name = "${var.env}-web-elb"
-  subnets = ["${module.network.vpc_public_subnet_id[0]}"]
-  security_groups = [ "${aws_security_group.elb_app_sg.id}" ]
 
-  listener {
-    instance_port = 80
-    instance_protocol = "http"
-    lb_port = 443
-    lb_protocol = "https"
-    ssl_certificate_id = var.ssl_cert_id
-
+#tg-group
+resource "aws_lb_target_group" "web_tg_group" {
+  name     = "web-${var.env}"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = module.network.vpc_id
+  load_balancing_algorithm_type = "round_robin"
+  deregistration_delay = 60
+  stickiness {
+    enabled = false
+    type    = "lb_cookie"
+    cookie_duration = 60
   }
+
   health_check {
-    healthy_threshold = 2
-    unhealthy_threshold = 2 
-    timeout = 3
-    target = "HTTP:80/"
-    interval = 30
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    interval            = 30
+    path                = "/"
+    protocol            = "HTTP"
+    matcher             = 200
+    
   }
 
-  instances = [aws_instance.webapp.id]
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_lb_listener" "listener_https" {
+  
+  load_balancer_arn = aws_lb.web_app_elb.arn
+  port              = 443
+  protocol          = "HTTPS"
+  certificate_arn = var.ssl_cert_id
+
+
+  default_action {    
+    target_group_arn = "${aws_lb_target_group.web_tg_group.arn}"
+    type             = "forward"  
+  }
+    
+  depends_on = [  aws_lb.web_app_elb ]
+}
+
+resource "aws_lb_listener" "listener_http" {
+  
+  load_balancer_arn = aws_lb.web_app_elb.arn
+  port              = 80
+  protocol          = "HTTP"
+
+
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
+  }
+  depends_on = [  aws_lb.web_app_elb ]
+}
+
+resource "aws_lb_target_group_attachment" "web_hosts" {
+  target_group_arn = "${aws_lb_target_group.web_tg_group.arn}"
+  target_id        = "${aws_instance.webapp.id}"  
+  port             = 80
+}
+
+## load balancer
+resource "aws_lb" "web_app_elb" {
+  name = "${var.env}-web-elb"
+  internal = false
+  load_balancer_type = "application"
+  subnets = ["${module.network.vpc_public_subnet_id[0]}", "${module.network.vpc_public_subnet_id[1]}"]
+  security_groups = [ "${aws_security_group.elb_app_sg.id}" ]
 }
 ## key pair used
 resource "aws_key_pair" "esteban-challenge-key" {
