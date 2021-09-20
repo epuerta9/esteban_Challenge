@@ -20,8 +20,15 @@ class Complex(object):
     def __add__(self, no):
         return f"{self.real + no.real} + {self.imaginary + no.imaginary}" 
     def __sub__(self, no):
-        
+        pass
     def __mul__(self, no):
+        #(3 + 4i)(2 + 2i)
+        firsts = self.real * no.real
+        outers = self.real * no.imaginary #with i 
+        inners = self.imaginary * no.real #with i
+        lasts = self.imaginary * no.imaginary #i^2
+
+        return f"{firsts} + {outers}i + {inners}i + {lasts}i^2"
 
     def __truediv__(self, no):
 
