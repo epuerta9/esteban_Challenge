@@ -7,7 +7,7 @@ pipeline {
             dir('infra/app') {
                 sh 'terraform init'
                 sh 'terraform validate'
-                sh 'terraform workspace new dev'
+                sh 'terraform workspace dev'
                 sh 'terraform apply --auto-approve'
                 sh 'terraform output -json > output.json'
                 stash includes: 'output.json', name: 'tf_output'
