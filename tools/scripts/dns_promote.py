@@ -7,14 +7,15 @@ def get_load_balancer_dns_name(client, args):
     
     try:
         response = client.describe_load_balancers(
-        LoadBalancerNames=[
+        Names=[
             args.loadbalancer_name,
         ],
         )
     except Exception as err:
         print(err)
         sys.exit()
-    return response['LoadBalancerDescriptions'][0]['DNSName']
+    print(response)
+    return response['LoadBalancers'][0]['DNSName']
 
 
 def main():
