@@ -1,4 +1,4 @@
-    vpc_name = "dev-challenge-vpc" 
+    vpc_name = "prod-challenge-vpc" 
     vpc_cidr = "10.3.0.0/16" 
     vpc_private_subnets = ["10.3.1.0/24"] 
     vpc_public_subnets = ["10.3.2.0/24"]

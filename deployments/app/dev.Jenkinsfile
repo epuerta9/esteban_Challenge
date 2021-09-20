@@ -7,10 +7,10 @@ pipeline {
             dir('infra/app') {
                 sh 'terraform init'
                 sh 'terraform validate'
-                sh 'terraform workspace dev'
+                sh 'terraform workspace new dev'
+                sh 'terraform workspace select dev'
                 sh 'terraform apply --auto-approve'
                 sh 'terraform output -json > ../ansible/tf_output.json'
-                // stash includes: 'output.json', name: 'tf_output'
             }
         }
       }
@@ -19,16 +19,7 @@ pipeline {
     stage('ansible') {
       steps {
             withAWS(credentials: 'epuerta-challenge', region: 'us-east-2') {
-            //   dir('infra/app'){
-            //     unstash 'tf_output'
-            //     sh '''
-            //     #!/bin/bash
-            //     set -x 
-            //     set -e
-            //     export BASTION=$(jq '.bastion_ip.value' tf_output)
-            //     echo $BASTION
-            //     '''
-            //   }
+
               dir('infra/ansible') {
                   sh '''
                   #! /bin/bash
