@@ -7,8 +7,8 @@ pipeline {
           
                 withAWS(credentials: 'epuerta-challenge', region: 'us-east-2'){
                     
-                    // sh "git tag --sort version:refname | tail -1 | xargs -I @@ ./build_web.sh $GIT_BRANCH @@"
-                    sh "/bin/bash build_web.sh $GIT_BRANCH 0.2.0"
+                    sh "git tag --sort version:refname | tail -1 | xargs -I @@ ./build_web.sh $GIT_BRANCH @@"
+                   
 
                 }
             }
