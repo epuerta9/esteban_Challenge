@@ -7,8 +7,8 @@ pipeline {
           
                 withAWS(credentials: 'epuerta-challenge', region: 'us-east-2'){
                     
-                    sh' $GIT_BRANCH '
-                    sh '$TAG_NAME'
+                    sh' echo $GIT_TAG '
+                    sh 'echo $TAG_NAME'
                     sh './build_web.sh $GIT_BRANCH ${env.BUILD_VERSION}'
                    
 

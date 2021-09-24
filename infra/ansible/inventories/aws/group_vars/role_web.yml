@@ -2,7 +2,7 @@
 #####ansible ssh proxy commands
 ##override this command in ci/cd when key is added to ssh-agent
 
-ansible_ssh_common_args: '-o StrictHostKeyChecking="no" -o ProxyCommand="ssh -i keys/dev_challenge -W %h:%p ubuntu@3.133.79.44"'
+ansible_ssh_common_args: '-o StrictHostKeyChecking="no" -o ProxyCommand="ssh -i keys/dev_challenge -W %h:%p ubuntu@3.138.138.84"'
 #ansible_ssh_private_key_file: ./keys/prod_challenge
 ansible_python_interpreter: /usr/bin/python3
 ansible_port: 22
