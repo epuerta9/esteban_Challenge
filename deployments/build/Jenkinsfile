@@ -3,13 +3,12 @@ pipeline {
   stages {
     stage('build image') {
         steps {
-          latestTag = sh(returnStdout:  true, script: "git tag --sort=-creatordate | head -n 1").trim()
             dir("deployments/build") {
           
                 withAWS(credentials: 'epuerta-challenge', region: 'us-east-2'){
                     
-                    
-                    env.BUILD_VERSION = latestTag
+                    sh' $GIT_BRANCH '
+                    sh '$TAG_NAME'
                     sh './build_web.sh $GIT_BRANCH ${env.BUILD_VERSION}'
                    
 
