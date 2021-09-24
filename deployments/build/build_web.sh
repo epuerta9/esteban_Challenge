@@ -6,6 +6,8 @@ VERSION=$2
 set -x
 set -e
 
+echo $BRANCH
+echo $VERSION
 
 aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/y3f6w2p0
 
